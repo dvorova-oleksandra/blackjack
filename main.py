@@ -27,6 +27,20 @@ def score_now(player_cards, computer_cards):
     print(f"It's your card:{player_cards}, your sum: {sum(player_cards)}")
     print(f"It is one of card from computer {computer_cards[0]}")
 
+def blackjack(player_cards, computer_cards):
+    if sum(player_cards) == 21 and sum(computer_cards) == 21:
+        print("Draw")
+        return True
+    elif sum(computer_cards) == 21:
+        print("You lose")
+        return True
+    elif sum(player_cards) == 21:
+        print("You win")
+        return True
+    else:
+        return False
+
+
 def adding_cards(player_cards):
     '''Bringing new card, so adding new random card to list'''
     max_num = len(cards)
@@ -52,8 +66,6 @@ def computer_play (computer_cards):
     stop = True
     while stop:
         over = checking_over_twenty_one(computer_cards)
-        random_act = random.randint(0, 1)
-        print(random_act)
         if over > 21:
             stop = False
         else:
@@ -63,14 +75,15 @@ def computer_play (computer_cards):
                 stop = False
     return computer_cards
 
-def action(user):
+def action(user, computer_cards):
     '''Action of user. You can choose to add card or do nothing'''
     while True:
         action = input("Do you want to add card? If you want , you must write y\n")
-        if action == 'y' and checking_over_twenty_one(user) == False:
+        if action == 'y' and checking_over_twenty_one(user) == False and blackjack(user, computer_cards) == False:
             adding_cards(user)
-            print(str(user) + " " + str(sum(user)))
+            print(f"It's your card: {user} and sum:{sum(user)}")
             checking_over_twenty_one(user)
+
         else:
             break
     return user
@@ -79,8 +92,8 @@ def win(user, computer):
     '''Method return output with info who win or lose'''
     check_user = checking_over_twenty_one(user)
     check_computer = checking_over_twenty_one(computer)
-    print(str(user)+" "+str(sum(user)))
-    print(str(computer)+" "+str(sum(computer)))
+    print(f"It's your cards: {user} and sum: {sum(user)}")
+    print(f"It's computer cards: {computer} and sum: {sum(computer)}")
     if check_user == True or (sum(user)<sum(computer) and check_computer == False):
         print("You lose")
     elif check_computer == True or sum(user)>sum(computer):
@@ -93,12 +106,14 @@ def main():
     user = deal_two_cards()
     computer = deal_two_cards()
     score_now(user, computer)
-    action(user)
-    if checking_over_twenty_one(user) == True:
-        print("You lose")
-    else:
-        computer_play(computer)
-        win(user, computer)
+    now = blackjack(user, computer)
+    if now == False:
+        action(user, computer)
+        if checking_over_twenty_one(user) == True:
+            print("You lose")
+        else:
+            computer_play(computer)
+            win(user, computer)
 
 main()
 
