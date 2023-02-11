@@ -1,5 +1,6 @@
 import art
 import random
+from replit import clear
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
 def deal_two_cards():
@@ -7,14 +8,13 @@ def deal_two_cards():
     '''
     player_cards = []
     for i in range(2):
-        max_num = len(cards)
-        random_card = random.randint(0, max_num-1)
+        random_card = random.choice(cards)
         player_cards.append(cards[random_card])
     eleven = True
     while eleven:
         if player_cards[0] == player_cards[1] == 11:
-            max_num = len(cards)
-            random_card = random.randint(0, max_num - 1)
+            player_cards.remove(11)
+            random_card = random.choice(cards)
             player_cards.append(cards[random_card])
             continue
         else:
@@ -101,7 +101,8 @@ def win(user, computer):
     else:
         print("Draw")
 
-def main():
+def game():
+    '''Start and control game'''
     print(art.logo)
     user = deal_two_cards()
     computer = deal_two_cards()
@@ -115,11 +116,20 @@ def main():
             computer_play(computer)
             win(user, computer)
 
-main()
+
+def main():
+    game()
+    while True:
+        answer = input("Do you want to play more? If you want, you must write y ")
+        if answer != 'y':
+            break
+        else:
+            clear()
+            game()
 
 
-
-
+if __name__ == '__main__':
+    main()
 
 
 
